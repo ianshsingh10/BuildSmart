@@ -73,9 +73,26 @@ export default function ProductDetail() {
   };
 
   const handleBuyNow = () => {
-    if (!user._id) return alert("You must be logged in to proceed.");
-    navigate("/checkout");
+  if (!user?._id) {
+    alert("You must be logged in to proceed with purchase.");
+    navigate("/login");
+    return;
+  }
+
+  if (quantity < 1) {
+    alert("Quantity must be at least 1.");
+    return;
+  }
+
+  const itemToBuy = {
+    product: product,
+    quantity: quantity,
   };
+
+  navigate("/checkout", { state: { items: [itemToBuy] } });
+};
+
+
 
   const handleAddReview = async () => {
     if (!user._id) return alert("You must be logged in to add a review.");

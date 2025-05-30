@@ -15,44 +15,43 @@ export default function CartPage() {
   }, []);
 
   const fetchUserAndCart = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
         navigate("/login");
         return;
       }
 
-      try {
-        const userId = localStorage.getItem("userId");
-        if (!userId) {
-          navigate("/login");
-          return;
-        }
+      const { data: cartData } = await axios.get(`${Cart}/user/${userId}`);
+      const { data: wishListData } = await axios.get(
+        `${Cart}/user/wishlist/${userId}`
+      );
 
-        const { data: cartData } = await axios.get(`${Cart}/user/${userId}`);
-        const { data: wishListData } = await axios.get(
-          `${Cart}/user/wishlist/${userId}`
-        );
+      setCartItems(cartData.items || []);
+      setwishlistItems(wishListData.items || []);
 
-        setCartItems(cartData.items || []);
-        setwishlistItems(wishListData.items || []);
-
-        // After fetching both cart and wishlist
-        const initialQuantities = {};
-        cartData.items?.forEach((item) => {
-          initialQuantities[item._id] = item.quantity;
-        });
-        wishListData.items?.forEach((item) => {
-          initialQuantities[item._id] = item.quantity;
-        });
-        setEditedQuantities(initialQuantities);
-      } catch (err) {
-        console.error("Error loading cart:", err);
-        navigate("/login");
-      } finally {
-        setLoading(false);
-      }
-    };
-
+      // After fetching both cart and wishlist
+      const initialQuantities = {};
+      cartData.items?.forEach((item) => {
+        initialQuantities[item._id] = item.quantity;
+      });
+      wishListData.items?.forEach((item) => {
+        initialQuantities[item._id] = item.quantity;
+      });
+      setEditedQuantities(initialQuantities);
+    } catch (err) {
+      console.error("Error loading cart:", err);
+      navigate("/login");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const calculateTotal = () =>
     cartItems.reduce(
@@ -61,7 +60,11 @@ export default function CartPage() {
     );
 
   const handleCheckout = () => {
-    navigate("/checkout");
+    const itemsToCheckout = cartItems.map((item) => ({
+      product: item.product,
+      quantity: editedQuantities[item._id] || item.quantity,
+    }));
+    navigate("/checkout", { state: { items: itemsToCheckout } });
   };
 
   const handleQuantityInput = (itemId, newQuantity) => {
@@ -193,7 +196,6 @@ export default function CartPage() {
     }
     fetchUserAndCart();
   };
-
 
   if (loading) return <div className="text-center py-10">Loading...</div>;
 

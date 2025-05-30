@@ -5,6 +5,7 @@ import userRoute from './routes/userroute.js';
 import companyRoute from './routes/companyroute.js';
 import ProductRoute from './routes/productroute.js';
 import CartRoute from './routes/cartroute.js';
+import PaymentRoute from "./routes/paymentroute.js";
 import connectDB from "./utils/db.js";
 
 dotenv.config();
@@ -26,6 +27,7 @@ app.use("/api/user", userRoute);
 app.use("/api/company", companyRoute);
 app.use("/api/products", ProductRoute);
 app.use("/api/cart", CartRoute);
+app.use("/api/payment", PaymentRoute);
 
 // Database connect
 app.listen(PORT,()=>{

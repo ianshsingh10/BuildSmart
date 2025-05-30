@@ -14,6 +14,7 @@ import UpdateProduct from "./components/product/UpdateProduct";
 import ProductDetail from "./components/product/ProductDetail";
 import CartPage from "./components/CartPage";
 import ApplyRole from "./components/ApplyRole";
+import CheckoutPage from "./components/orders/checkoutPAge";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -73,6 +74,7 @@ function App() {
         <Route path="/product-detail/:productId" element={<ProductDetail />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/role" element={<ApplyRole />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
       </Routes>
       </div>
     </Router>
