@@ -30,7 +30,7 @@ export const registerCompany = async (req, res) => {
       phone,
       email,
       logo,
-      userId: req.id
+      userId: req.user.id
     });
 
     res.status(201).json({ message: "Company registered successfully.", company });
@@ -43,7 +43,7 @@ export const registerCompany = async (req, res) => {
 // Get companies for a user
 export const getCompany = async (req, res) => {
   try {
-    const companies = await Company.find({ userId: req.id });
+    const companies = await Company.find({ userId: req.user.id });
     if (!companies.length) {
       return res.status(404).json({ message: "No companies found.", success: false });
     }

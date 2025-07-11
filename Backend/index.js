@@ -7,12 +7,17 @@ import ProductRoute from './routes/productroute.js';
 import CartRoute from './routes/cartroute.js';
 import PaymentRoute from "./routes/paymentroute.js";
 import connectDB from "./utils/db.js";
+import path from 'path';
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 
 const app = express();
 app.use(express.json());
+
+const _dir=path.dirname("");
+const builtpath=path.join(_dir,"../Frontend/dist")
+app.use(express.static(builtpath));
 
 // Middlewares
 app.use(cors({

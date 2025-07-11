@@ -110,6 +110,12 @@ export default function CheckoutPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
+      <button
+        onClick={() => navigate(-1)}
+        className="text-indigo-600 font-medium mb-4 inline-flex items-center hover:underline"
+      >
+        ← Back
+      </button>
       <h1 className="text-2xl font-bold mb-6">Checkout</h1>
       {items.map((item) => (
         <div
